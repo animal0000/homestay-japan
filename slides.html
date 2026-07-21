@@ -1,0 +1,551 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>일본 가정에서의 하루 · 홈스테이 문화·예절 교육</title>
+<style>
+  :root{ --ink:#1b2a4a; --accent:#c8102e; --paper:#f7f8fb; --card:#fff; --muted:#5b6b86; --line:#e6e9f0; }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{
+    font-family:"Malgun Gothic","Apple SD Gothic Neo","Yu Gothic","Hiragino Kaku Gothic Pro","Meiryo",system-ui,sans-serif;
+    color:var(--ink); background:#dfe4ee; line-height:1.5; overflow:hidden;
+  }
+  .topbar{
+    position:fixed; top:0; left:0; right:0; height:6px; background:var(--accent); z-index:20;
+  }
+  .counter{
+    position:fixed; top:14px; right:16px; z-index:20;
+    background:rgba(27,42,74,.88); color:#fff; font-size:13px; font-weight:700;
+    padding:6px 12px; border-radius:999px; letter-spacing:.02em;
+  }
+  .home-link{
+    position:fixed; top:14px; left:16px; z-index:20;
+    background:rgba(255,255,255,.9); color:var(--ink); font-size:13px; font-weight:700;
+    padding:6px 12px; border-radius:999px; text-decoration:none; border:1px solid var(--line);
+  }
+  .stage{
+    height:100%; display:flex; align-items:center; justify-content:center; padding:44px 16px 84px;
+  }
+  .deck{
+    position:relative; width:min(94vw, 177.7vh); aspect-ratio:16/9; max-height:calc(100vh - 128px);
+    background:#fff; border-radius:16px; box-shadow:0 12px 40px rgba(20,30,60,.25); overflow:hidden;
+  }
+  @media (max-width:640px) and (orientation:portrait){
+    /* Strict 16:9 makes the deck far too short on tall narrow phones (width-bound).
+       Relax the ratio here so dense slides have room to breathe. */
+    .deck{ width:94vw; aspect-ratio:auto; height:78vh; max-height:none; }
+  }
+  .slide{
+    position:absolute; inset:0; display:none; flex-direction:column;
+    padding:clamp(18px,3.6vw,48px) clamp(20px,4.6vw,64px) clamp(14px,2.4vw,28px);
+  }
+  .slide.active{display:flex}
+  .slide .eyebrow{ font-size:clamp(10px,1.1vw,13px); letter-spacing:.08em; color:var(--muted); font-weight:700; text-transform:uppercase; margin-bottom:6px }
+  .slide h2{ margin:0 0 6px; font-size:clamp(18px,3vw,30px); color:var(--ink) }
+  .slide .lead{ margin:0 0 clamp(10px,2vw,18px); color:var(--muted); font-size:clamp(11px,1.6vw,15px) }
+  .slide .body{ flex:1; min-height:0; overflow:hidden; display:flex; flex-direction:column; justify-content:center; gap:clamp(6px,1.4vw,14px) }
+  .brandfoot{
+    display:flex; justify-content:space-between; align-items:center;
+    font-size:clamp(9px,1vw,11px); color:var(--muted); padding-top:8px; margin-top:auto;
+    border-top:1px solid var(--line);
+  }
+  .brandfoot .slidenum{ font-weight:700; color:var(--accent) }
+
+  /* --- reusable content blocks --- */
+  .jp-card{ background:linear-gradient(135deg,#1b2a4a,#28407a); color:#fff; border-radius:14px;
+    padding:clamp(12px,2.2vw,22px) clamp(16px,2.8vw,26px); }
+  .jp-card .jp{ font-size:clamp(18px,3.4vw,32px); font-weight:700; margin:0 0 4px }
+  .jp-card .pron{ font-size:clamp(12px,1.7vw,16px); opacity:.9; margin:0 0 2px }
+  .jp-card .mean{ font-size:clamp(11px,1.5vw,14px); opacity:.85 }
+
+  .grid-2{ display:grid; grid-template-columns:1fr 1fr; gap:clamp(10px,1.8vw,18px) }
+  .grid-3{ display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(8px,1.4vw,14px) }
+  @media (max-width:640px){ .grid-2, .grid-3{grid-template-columns:1fr} }
+
+  .info-card{ background:var(--paper); border:1px solid var(--line); border-radius:12px;
+    padding:clamp(10px,1.8vw,18px); font-size:clamp(11px,1.5vw,14px) }
+  .info-card .h{ font-weight:700; margin-bottom:4px; color:var(--ink); font-size:clamp(12px,1.7vw,15px) }
+  .info-card .d{ color:var(--muted) }
+
+  .steps{ display:flex; flex-wrap:wrap; gap:clamp(8px,1.6vw,14px); justify-content:center }
+  .step{ flex:1 1 110px; text-align:center; background:var(--paper); border:1px solid var(--line);
+    border-radius:12px; padding:clamp(10px,1.6vw,16px) 8px; font-size:clamp(10px,1.4vw,13px) }
+  .step .num{ display:inline-flex; align-items:center; justify-content:center; width:clamp(22px,2.6vw,30px);
+    height:clamp(22px,2.6vw,30px); border-radius:50%; background:var(--accent); color:#fff; font-weight:700;
+    margin-bottom:6px; font-size:clamp(11px,1.5vw,14px) }
+
+  .rule-list{ display:flex; flex-direction:column; gap:clamp(6px,1.2vw,10px) }
+  .rule-item{ display:flex; gap:10px; align-items:flex-start; background:var(--paper); border:1px solid var(--line);
+    border-radius:10px; padding:clamp(8px,1.4vw,14px) clamp(10px,1.6vw,16px); font-size:clamp(11px,1.5vw,14px) }
+  .rule-item .x{ color:var(--accent); font-weight:800; font-size:clamp(14px,2vw,18px); line-height:1 }
+  .rule-item b{ color:var(--ink) }
+  .rule-item span.d{ color:var(--muted) }
+
+  .timeline{ display:flex; gap:clamp(8px,1.6vw,16px); }
+  .tl-item{ flex:1; background:var(--paper); border:1px solid var(--line); border-radius:12px;
+    padding:clamp(10px,1.8vw,16px); position:relative; font-size:clamp(11px,1.5vw,14px) }
+  .tl-item .t{ font-weight:800; color:var(--accent); font-size:clamp(11px,1.5vw,14px); margin-bottom:4px }
+  .tl-item .d{ color:var(--ink) }
+
+  .goal{ text-align:center; font-weight:700; font-size:clamp(13px,2vw,17px); color:var(--ink);
+    background:#fdecef; border:1px solid #f4c6ce; border-radius:12px; padding:clamp(8px,1.4vw,14px) }
+
+  .center-emph{ text-align:center }
+  .center-emph .big{ font-size:clamp(20px,3.6vw,34px); font-weight:800; color:var(--ink); margin:0 0 6px }
+  .center-emph .sub{ color:var(--muted); font-size:clamp(11px,1.6vw,15px) }
+
+  .phrase-grid{ display:grid; grid-template-columns:repeat(5,1fr); gap:clamp(4px,.8vw,7px); align-content:center }
+  @media (max-width:900px){ .phrase-grid{grid-template-columns:repeat(3,1fr)} }
+  @media (max-width:640px){ .phrase-grid{grid-template-columns:repeat(2,1fr)} }
+  .chip{ background:var(--paper); border:1px solid var(--line); border-radius:8px; padding:4px 6px;
+    font-size:clamp(8px,1vw,10.5px); line-height:1.25 }
+  .chip .top{ display:flex; align-items:baseline; gap:4px; flex-wrap:wrap }
+  .chip .badge{ flex:0 0 auto; display:inline-block; background:var(--accent); color:#fff; border-radius:5px; font-size:8px;
+    padding:1px 5px; font-weight:700 }
+  .chip .jp{ font-weight:700; color:var(--ink); font-size:clamp(9px,1.15vw,12px) }
+  .chip .sub{ color:var(--muted); display:block; margin-top:1px }
+
+  .big-phrase-list{ display:flex; flex-direction:column; gap:clamp(4px,.9vw,7px); justify-content:center; flex:1; min-height:0 }
+  .bp-row{ display:flex; align-items:center; gap:clamp(8px,1.6vw,14px); background:var(--paper);
+    border:1px solid var(--line); border-radius:10px; padding:clamp(4px,.9vw,8px) clamp(10px,1.6vw,16px) }
+  .bp-row .badge{ flex:0 0 auto; width:clamp(18px,2.1vw,23px); height:clamp(18px,2.1vw,23px); border-radius:50%;
+    background:var(--accent); color:#fff; font-weight:700; display:flex; align-items:center; justify-content:center;
+    font-size:clamp(9px,1.2vw,12px) }
+  .bp-row .txt{ flex:1; min-width:0 }
+  .bp-row .jp{ font-weight:700; font-size:clamp(10px,1.4vw,14px); color:var(--ink) }
+  .bp-row .pron{ color:var(--muted); font-size:clamp(8px,1.15vw,11px) }
+  .bp-row .mean{ color:var(--ink); font-size:clamp(9px,1.25vw,12px); flex:0 0 auto; text-align:right;
+    max-width:38%; }
+
+  .callout{ background:#fff7e6; border:1px solid #f0d999; border-radius:10px; padding:clamp(8px,1.4vw,14px);
+    font-size:clamp(10px,1.4vw,13px); color:#6b5300 }
+
+  .closing-list{ display:flex; flex-direction:column; gap:clamp(8px,1.6vw,14px) }
+  .closing-item{ display:flex; align-items:center; gap:12px; background:var(--paper); border:1px solid var(--line);
+    border-radius:12px; padding:clamp(10px,1.8vw,16px) }
+  .closing-item .num{ flex:0 0 auto; width:clamp(26px,3vw,34px); height:clamp(26px,3vw,34px); border-radius:50%;
+    background:var(--ink); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800;
+    font-size:clamp(12px,1.7vw,16px) }
+  .closing-item .txt{ font-weight:700; font-size:clamp(12px,1.8vw,17px); color:var(--ink) }
+  .cta{ text-align:center; margin-top:clamp(8px,1.6vw,14px) }
+  .cta a{ display:inline-block; background:var(--accent); color:#fff; text-decoration:none; font-weight:700;
+    padding:clamp(8px,1.4vw,12px) clamp(18px,2.6vw,28px); border-radius:999px; font-size:clamp(12px,1.7vw,16px) }
+
+  .map-diagram{ display:flex; align-items:center; justify-content:center; gap:clamp(10px,2vw,24px) }
+  .map-box{ background:var(--paper); border:2px dashed var(--line); border-radius:12px; padding:clamp(14px,2.6vw,26px);
+    font-weight:700; color:var(--ink); font-size:clamp(12px,1.8vw,16px); text-align:center }
+  .map-arrow{ color:var(--muted); font-size:clamp(16px,2.4vw,24px) }
+
+  .cover{ position:absolute;
+    top:calc(-1*clamp(18px,3.6vw,48px)); right:calc(-1*clamp(20px,4.6vw,64px));
+    bottom:calc(-1*clamp(14px,2.4vw,28px)); left:calc(-1*clamp(20px,4.6vw,64px));
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; background:linear-gradient(160deg,#1b2a4a,#28407a); color:#fff; padding:24px }
+  .cover .eyebrow{ color:#cfd8ea }
+  .cover h1{ font-size:clamp(24px,5.4vw,44px); margin:10px 0 8px }
+  .cover .sub{ font-size:clamp(13px,2.2vw,18px); opacity:.92; margin-bottom:14px }
+  .cover .badge{ display:inline-block; padding:5px 16px; border-radius:999px; background:rgba(255,255,255,.15);
+    font-size:clamp(11px,1.6vw,14px); margin-bottom:10px }
+  .cover .tagline{ font-size:clamp(12px,1.8vw,16px); opacity:.9; letter-spacing:.03em }
+  .cover .footnote{ margin-top:16px; font-size:clamp(9px,1.2vw,11px); opacity:.7 }
+
+  .navbtn{
+    position:fixed; bottom:22px; z-index:20; background:var(--ink); color:#fff; border:none;
+    width:46px; height:46px; border-radius:50%; font-size:20px; cursor:pointer; box-shadow:0 4px 14px rgba(0,0,0,.25);
+  }
+  .navbtn:disabled{ opacity:.35; cursor:default }
+  #prevBtn{ left:calc(50% - 74px) }
+  #nextBtn{ left:calc(50% + 28px) }
+  .navhint{ position:fixed; bottom:26px; left:0; right:0; text-align:center; font-size:11px; color:#5b6b86; z-index:5 }
+</style>
+</head>
+<body>
+  <div class="topbar"></div>
+  <a class="home-link" href="index.html">← 허브</a>
+  <div class="counter"><span id="cur">1</span> / <span id="tot">18</span></div>
+
+  <div class="stage">
+    <div class="deck" id="deck">
+
+      <!-- 1 : 표지 -->
+      <section class="slide">
+        <div class="cover">
+          <div class="eyebrow">배재중학교 · PAICHAI MIDDLE SCHOOL · JAPAN HOME STAY 2026</div>
+          <h1>일본 가정에서의 하루</h1>
+          <div class="sub">홈스테이 문화·예절 교육</div>
+          <div class="badge">2026 자매교 방문 · 7/31–8/3</div>
+          <div class="tagline">편안하고 · 안전하게 · 즐겁게</div>
+          <div class="footnote">사전교육 자료 · 2026. 7. 20.(월) 준비 모임 2회차 · 시청각실 · 40분 + 퀴즈·체크 10분</div>
+        </div>
+      </section>
+
+      <!-- 2 : 오늘 왜 이걸 배울까 -->
+      <section class="slide">
+        <div class="eyebrow">오리엔테이션</div>
+        <h2>오늘 왜 이걸 배울까?</h2>
+        <p class="lead">호텔이 아니라 진짜 일본 가정에서 보내는 하루를 미리 연습합니다.</p>
+        <div class="body">
+          <div class="timeline">
+            <div class="tl-item"><div class="t">8/1(토) 09:00</div><div class="d">호스트 가정과 대면식</div></div>
+            <div class="tl-item"><div class="t">8/1(토) 오후–밤</div><div class="d">가정에서 하루 보내기</div></div>
+            <div class="tl-item"><div class="t">8/2(일) 아침</div><div class="d">조식 후 다시 집합</div></div>
+          </div>
+          <div class="goal">목표는 딱 세 가지: 실례 없이 · 안전하게 · 즐겁게</div>
+        </div>
+        <div class="brandfoot"><span>배재중학교 · Japan Home Stay 2026</span><span class="slidenum">02</span></div>
+      </section>
+
+      <!-- 3 : 하루의 지도 -->
+      <section class="slide">
+        <div class="eyebrow">전체 흐름</div>
+        <h2>하루의 지도</h2>
+        <p class="lead">만남부터 다음 날 아침까지, 이 순서로 따라가면 됩니다.</p>
+        <div class="body">
+          <div class="steps">
+            <div class="step"><div class="num">1</div>만남·인사</div>
+            <div class="step"><div class="num">2</div>집 안</div>
+            <div class="step"><div class="num">3</div>식사</div>
+            <div class="step"><div class="num">4</div>외출</div>
+            <div class="step"><div class="num">5</div>목욕·화장실</div>
+            <div class="step"><div class="num">6</div>취침</div>
+            <div class="step"><div class="num">7</div>아침</div>
+          </div>
+          <p class="lead" style="text-align:center;margin:0">각 장면의 &lsquo;이렇게 하면 좋다&rsquo;를 하나씩 익혀 봅시다.</p>
+        </div>
+        <div class="brandfoot"><span>배재중학교 · Japan Home Stay 2026</span><span class="slidenum">03</span></div>
+      </section>
+
+      <!-- 4 : 만남: 첫인사 -->
+      <section class="slide">
+        <div class="eyebrow">만남</div>
+        <h2>만남: 첫인사</h2>
+        <p class="lead">가볍게 고개를 숙여 목례 · 밝은 표정이 절반입니다.</p>
+        <div class="body">
+          <div class="jp-card">
+            <div class="pron" style="opacity:.75">처음 만났을 때</div>
+            <div class="jp">はじめまして、よろしくお願いします。</div>
+            <div class="pron">하지메마시테, 요로시쿠 오네가이시마스</div>
+          </div>
+          <div class="info-card"><div class="d">자기소개 카드는 꼭 <b style="color:var(--ink)">두 손으로</b> 건네기</div></div>
+        </div>
+        <div class="brandfoot"><span>배재중학교 · Japan Home Stay 2026</span><span class="slidenum">04</span></div>
+      </section>
+
+      <!-- 5 : 만남: 선물과 호칭 -->
+      <section class="slide">
+        <div class="eyebrow">만남</div>
+        <h2>만남: 선물과 호칭</h2>
+        <p class="lead">처음 만남의 작은 배려가 가장 오래 기억됩니다.</p>
+        <div class="body">
+          <div class="grid-2">
+            <div class="jp-card">
+              <div class="pron" style="opacity:.75">선물은 두 손으로</div>
+              <div class="jp">どうぞ</div>
+              <div class="pron">도-조 · &ldquo;한국에서 준비했어요&rdquo;</div>
+              <div class="mean">첫 인사 직후에 따뜻하게 건네요.</div>
+            </div>
+            <div class="info-card">
+              <div class="h">호스트 가족의 호칭</div>
+              <div class="jp" style="font-weight:700;color:var(--ink);font-size:clamp(14px,2vw,20px);margin:4px 0">○○상(さん)</div>
+              <div class="d">이름에 &lsquo;상&rsquo;을 붙이면 가장 안전해요.<br>무리해서 가족 호칭을 쓰지 않아도 됩니다.</div>
+            </div>
+          </div>
+        </div>
+        <div class="brandfoot"><span>배재중학교 · Japan Home Stay 2026</span><span class="slidenum">05</span></div>
+      </section>
+
+      <!-- 6 : 집에 들어갈 때 -->
+      <section class="slide">
+        <div class="eyebrow">집 안</div>
+        <h2>집에 들어갈 때</h2>
+        <p class="lead">현관에서 시작되는 세 가지 배려</p>
+        <div class="body">
+          <div class="rule-list">
+            <div class="rule-item"><span class="x">1</span><div><b>おじゃまします</b> — &ldquo;실례합니다&rdquo; 하고 들어가기</div></div>
+            <div class="rule-item"><span class="x">2</span><div><b>신발은 가지런히</b> — <span class="d">신발 코가 문 쪽을 향하게</span></div></div>
+            <div class="rule-item"><span class="x">3</span><div><b>다다미에서는 벗기</b> — <span class="d">실내 슬리퍼도 벗습니다.</span></div></div>
+          </div>
+          <div class="callout">나올 때는 &ldquo;おじゃましました&rdquo;</div>
+        </div>
+        <div class="brandfoot"><span>배재중학교 · Japan Home Stay 2026</span><span class="slidenum">06</span></div>
+      </section>
+
+      <!-- 7 : 식사: 마법의 두 마디 -->
+      <section class="slide">
+        <div class="eyebrow">식사</div>
+        <h2>식사: 마법의 두 마디</h2>
+        <p class="lead">식사 전후, 이 두 마디는 반드시 기억하세요.</p>
+        <div class="body">
+          <div class="grid-2">
+            <div class="jp-card">
+              <div class="jp">いただきます</div>
+              <div class="pron">이타다키마스 · 먹기 전에</div>
+            </div>
+            <div class="jp-card">
+              <div class="jp">ごちそうさまでした</div>
+              <div class="pron">고치소-사마데시타 · 먹고 나서</div>
+            </div>
+          </div>
+          <div class="callout">맛있으면 한마디 더: <b>おいしいです</b></div>
+        </div>
+        <div class="brandfoot"><span>배재중학교 · Japan Home Stay 2026</span><span class="slidenum">07</span></div>
+      </section>
+
+      <!-- 8 : 식사: 젓가락 금기 4가지 -->
+      <section class="slide">
+        <div class="eyebrow">식사</div>
+        <h2>식사: 젓가락 금기 4가지</h2>
+        <p class="lead">이유를 알면 더 오래 기억할 수 있어요.</p>
+        <div class="body">
+          <div class="grid-2">
+            <div class="info-card"><div class="h">① 밥에 젓가락 꽂기</div><div class="d">장례 의식을 떠올리게 해요.</div></div>
+            <div class="info-card"><div class="h">② 젓가락끼리 주고받기</div><div class="d">같은 이유로 피해야 해요.</div></div>
+            <div class="info-card"><div class="h">③ 그릇 끌어당기기</div><div class="d">그릇은 손에 들고 먹습니다.</div></div>
+            <div class="info-card"><div class="h">④ 반찬 위에서 헤매기</div><div class="d">무엇을 먹을지 먼저 정해요.</div></div>
+          </div>
+        </div>
+        <div class="brandfoot"><span>배재중학교 · Japan Home Stay 2026</span><span class="slidenum">08</span></div>
+      </section>
+
+      <!-- 9 : 식사: 남기지 않기·사양하기·알러지 -->
+      <section class="slide">
+        <div class="eyebrow">식사</div>
+        <h2>식사: 남기지 않기·사양하기·알러지</h2>
+        <p class="lead">고마움은 표현하고, 안전은 한 번 더 확인합니다.</p>
+        <div class="body">
+          <div class="grid-3">
+            <div class="info-card"><div class="h">남기지 않기</div><div class="d">먹을 만큼만 받고, 음식을 소중히 대하기</div></div>
+            <div class="jp-card">
+              <div class="pron" style="opacity:.75">사양하기</div>
+              <div class="jp" style="font-size:clamp(14px,2.2vw,20px)">もう おなかが<br>いっぱいです</div>
+              <div class="mean">배가 부릅니다.</div>
+            </div>
+            <div class="jp-card">
+              <div class="pron" style="opacity:.75">알러지 확인</div>
+              <div class="jp" style="font-size:clamp(13px,2vw,18px)">すみません、○○は<br>食べられません</div>
+              <div class="mean">스스로 한 번 더 확인하기</div>
+            </div>
+          </div>
+        </div>
+        <div class="brandfoot"><span>배재중학교 · Japan Home Stay 2026</span><span class="slidenum">09</span></div>
+      </section>
+
+      <!-- 10 : 집 안에서: 함께하는 시간 -->
+      <section class="slide">
+        <div class="eyebrow">집 안</div>
+        <h2>집 안에서: 함께하는 시간</h2>
+        <p class="lead">스마트폰보다 대화에 집중하기</p>
+        <div class="body">
+          <div class="info-card">하루뿐인 시간, 서로의 일상과 이야기를 나눠 보세요.</div>
+          <div class="grid-2">
+            <div class="info-card"><div class="h">아침에는</div><div class="d">이불 정리</div></div>
+            <div class="info-card"><div class="h">사용한 물건은</div><div class="d">제자리에</div></div>
+          </div>
+        </div>
+        <div class="brandfoot"><span>배재중학교 · Japan Home Stay 2026</span><span class="slidenum">10</span></div>
+      </section>
+
+      <!-- 11 : 목욕(오후로) 1: 핵심 개념 -->
+      <section class="slide">
+        <div class="eyebrow">목욕(오후로) ①</div>
+        <h2>핵심 개념</h2>
+        <p class="lead">그래서 욕조 물을 깨끗하게 유지하는 약속이 생깁니다.</p>
+        <div class="body">
+          <div class="center-emph">
+            <div class="big">욕조 물은 가족이<br>순서대로 함께 쓴다</div>
+          </div>
+          <div class="map-diagram">
+            <div class="map-box">씻는 공간</div>
+            <div class="map-arrow">→</div>
+            <div class="map-box">욕조</div>
+          </div>
+        </div>
+        <div class="brandfoot"><span>배재중학교 · Japan Home Stay 2026</span><span class="slidenum">11</span></div>
+      </section>
+
+      <!-- 12 : 목욕 2: 실전 순서 -->
+      <section class="slide">
+        <div class="eyebrow">목욕(오후로) ②</div>
+        <h2>실전 순서</h2>
+        <p class="lead">욕조에 들어가기 전부터 나올 때까지</p>
+        <div class="body">
+          <div class="steps">
+            <div class="step"><div class="num">1</div><b>몸 씻기</b><br>앉아서 · 비누로 완전히</div>
+            <div class="step"><div class="num">2</div><b>욕조에 담그기</b><br>비누·수건 금지</div>
+            <div class="step"><div class="num">3</div><b>나와서 정돈</b><br>머리카락 정도</div>
+            <div class="step"><div class="num">4</div><b>물은 그대로!</b><br>절대 빼지 않기</div>
+          </div>
+          <div class="jp-card" style="text-align:center">
+            <div class="jp">お先にいただきます</div>
+            <div class="pron">먼저 하겠습니다</div>
+          </div>
+          <div class="callout">★ 서서 말고 앉아서 씻기 — 거품이 튀어 욕조 물에 들어가면, 뒤에 쓸 가족이 곤란합니다.</div>
+        </div>
+        <div class="brandfoot"><span>배재중학교 · Japan Home Stay 2026</span><span class="slidenum">12</span></div>
+      </section>
+
+      <!-- 13 : 화장실 -->
+      <section class="slide">
+        <div class="eyebrow">화장실</div>
+        <h2>화장실</h2>
+        <p class="lead">전용 슬리퍼와 버튼 세 가지만 기억하세요.</p>
+        <div class="body">
+          <div class="info-card"><div class="h">화장실 전용 슬리퍼</div><div class="d">나올 때 꼭 원위치!</div></div>
+          <div class="grid-3">
+            <div class="info-card" style="text-align:center"><div class="jp" style="font-weight:700;font-size:clamp(16px,2.4vw,22px);color:var(--ink)">流す</div><div class="d">물내림</div></div>
+            <div class="info-card" style="text-align:center"><div class="jp" style="font-weight:700;font-size:clamp(16px,2.4vw,22px);color:var(--ink)">大</div><div class="d">큰 용변</div></div>
+            <div class="info-card" style="text-align:center"><div class="jp" style="font-weight:700;font-size:clamp(16px,2.4vw,22px);color:var(--ink)">小</div><div class="d">작은 용변</div></div>
+          </div>
+        </div>
+        <div class="brandfoot"><span>배재중학교 · Japan Home Stay 2026</span><span class="slidenum">13</span></div>
+      </section>
+
+      <!-- 14 : 외출·이동·공공장소 -->
+      <section class="slide">
+        <div class="eyebrow">외출</div>
+        <h2>외출·이동·공공장소</h2>
+        <p class="lead">호스트 가족과 나들이할 때의 네 가지 약속</p>
+        <div class="body">
+          <div class="grid-2">
+            <div class="info-card"><div class="h">집합 5분 전 행동</div><div class="d">한 사람의 지각이 전체 일정을 늦춥니다.</div></div>
+            <div class="info-card"><div class="h">교통수단에서 조용히</div><div class="d">통화는 자제하고 주변을 배려해요.</div></div>
+            <div class="info-card"><div class="h">쓰레기 되가져가기</div><div class="d">길에 버리지 않고, 걸으며 먹지 않아요.</div></div>
+            <div class="info-card"><div class="h">계산은 트레이에</div><div class="d">점원 손이 아닌 트레이에 놓습니다.</div></div>
+          </div>
+        </div>
+        <div class="brandfoot"><span>배재중학교 · Japan Home Stay 2026</span><span class="slidenum">14</span></div>
+      </section>
+
+      <!-- 15 : 표현 연습 1: 인사 8 + 집/식사 7 -->
+      <section class="slide">
+        <div class="eyebrow">표현 연습 ①</div>
+        <h2>인사 8 + 집·식사 7</h2>
+        <p class="lead">상황을 들으면 일본어로 바로 답해 보세요.</p>
+        <div class="body">
+          <div class="phrase-grid">
+            <div class="chip"><div class="top"><span class="badge">1</span><span class="jp">おはようございます</span></div><span class="sub">오하요- 고자이마스 · 아침 인사</span></div>
+            <div class="chip"><div class="top"><span class="badge">2</span><span class="jp">こんにちは</span></div><span class="sub">곤니치와 · 낮 인사</span></div>
+            <div class="chip"><div class="top"><span class="badge">3</span><span class="jp">こんばんは</span></div><span class="sub">곤방와 · 저녁 인사</span></div>
+            <div class="chip"><div class="top"><span class="badge">4</span><span class="jp">おやすみなさい</span></div><span class="sub">오야스미나사이 · 안녕히 주무세요</span></div>
+            <div class="chip"><div class="top"><span class="badge">5</span><span class="jp">ありがとうございます</span></div><span class="sub">아리가토- 고자이마스 · 감사합니다</span></div>
+            <div class="chip"><div class="top"><span class="badge">6</span><span class="jp">すみません</span></div><span class="sub">스미마셍 · 죄송합니다/저기요</span></div>
+            <div class="chip"><div class="top"><span class="badge">7</span><span class="jp">はじめまして、よろしくおねがいします</span></div><span class="sub">하지메마시테, 요로시쿠 오네가이시마스 · 처음 뵙겠습니다</span></div>
+            <div class="chip"><div class="top"><span class="badge">8</span><span class="jp">さようなら／またね</span></div><span class="sub">사요-나라 / 마타네 · 안녕히 계세요</span></div>
+            <div class="chip"><div class="top"><span class="badge">9</span><span class="jp">おじゃまします</span></div><span class="sub">오자마시마스 · 들어갈 때</span></div>
+            <div class="chip"><div class="top"><span class="badge">10</span><span class="jp">おじゃましました</span></div><span class="sub">오자마시마시타 · 나올 때</span></div>
+            <div class="chip"><div class="top"><span class="badge">11</span><span class="jp">いただきます</span></div><span class="sub">이타다키마스 · 잘 먹겠습니다</span></div>
+            <div class="chip"><div class="top"><span class="badge">12</span><span class="jp">ごちそうさまでした</span></div><span class="sub">고치소-사마데시타 · 잘 먹었습니다</span></div>
+            <div class="chip"><div class="top"><span class="badge">13</span><span class="jp">おいしいです</span></div><span class="sub">오이시-데스 · 맛있어요</span></div>
+            <div class="chip"><div class="top"><span class="badge">14</span><span class="jp">もうおなかがいっぱいです</span></div><span class="sub">모- 오나카가 잇빠이데스 · 배가 부릅니다</span></div>
+            <div class="chip"><div class="top"><span class="badge">15</span><span class="jp">どうぞ</span></div><span class="sub">도-조 · 여기요/드세요</span></div>
+          </div>
+        </div>
+        <div class="brandfoot"><span>배재중학교 · Japan Home Stay 2026</span><span class="slidenum">15</span></div>
+      </section>
+
+      <!-- 16 : 표현 연습 2: 부탁/확인/비상 5 -->
+      <section class="slide">
+        <div class="eyebrow">표현 연습 ②</div>
+        <h2>부탁·확인·비상 5</h2>
+        <p class="lead">생각해서 말하지 말고, 입에서 바로 나오도록 짝과 연습합니다.</p>
+        <div class="body">
+          <div class="big-phrase-list">
+            <div class="bp-row"><div class="badge">16</div><div class="txt"><div class="jp">すみませんが、おねがいします</div><div class="pron">스미마셍가, 오네가이시마스</div></div><div class="mean">죄송하지만, 부탁드립니다</div></div>
+            <div class="bp-row"><div class="badge">17</div><div class="txt"><div class="jp">トイレはどこですか</div><div class="pron">토이레와 도코데스카</div></div><div class="mean">화장실이 어디예요?</div></div>
+            <div class="bp-row"><div class="badge">18</div><div class="txt"><div class="jp">○○はたべられません</div><div class="pron">○○와 다베라레마셍</div></div><div class="mean">○○은 못 먹습니다</div></div>
+            <div class="bp-row"><div class="badge">19</div><div class="txt"><div class="jp">ぐあいがわるいです</div><div class="pron">구아이가 와루이데스</div></div><div class="mean">몸이 안 좋아요</div></div>
+            <div class="bp-row"><div class="badge">20</div><div class="txt"><div class="jp">もういちどおねがいします</div><div class="pron">모- 이치도 오네가이시마스</div></div><div class="mean">다시 한 번 말해 주세요</div></div>
+          </div>
+          <p class="lead" style="text-align:center;margin:4px 0 0;flex:0 0 auto">짝과 마주 보고, 카드 뒷면 상황을 서로 내 주세요.</p>
+        </div>
+        <div class="brandfoot"><span>배재중학교 · Japan Home Stay 2026</span><span class="slidenum">16</span></div>
+      </section>
+
+      <!-- 17 : 곤란할 때: 안전 수칙 -->
+      <section class="slide">
+        <div class="eyebrow">안전</div>
+        <h2>곤란할 때: 안전 수칙</h2>
+        <p class="lead">참지 말고, 멈추고, 바로 도움을 요청합니다.</p>
+        <div class="body">
+          <div class="rule-list">
+            <div class="rule-item"><span class="x">!</span><div><b>몸이 아플 때</b> — <span class="jp" style="font-weight:700">ぐあいがわるいです</span><br><span class="d">호스트에게 말하고 인솔 선생님께 연락</span></div></div>
+            <div class="rule-item"><span class="x">!</span><div><b>길을 잃었을 때</b> — <span class="d">움직이지 말고 그 자리 대기 · 가까운 편의점에 도움 요청</span></div></div>
+            <div class="rule-item"><span class="x">!</span><div><b>번역앱이 필요할 때</b> — <span class="d">출국 전 오프라인 사전을 꼭 다운로드(데이터가 안 터져도 사용할 수 있어요.)</span></div></div>
+            <div class="rule-item"><span class="x">!</span><div><b>비상연락처</b> — <span class="d">포켓 핸드북 마지막 쪽에 미리 기입해 두세요.</span></div></div>
+          </div>
+        </div>
+        <div class="brandfoot"><span>배재중학교 · Japan Home Stay 2026</span><span class="slidenum">17</span></div>
+      </section>
+
+      <!-- 18 : 정리 + 셀프 체크 안내 -->
+      <section class="slide">
+        <div class="eyebrow">마무리</div>
+        <h2>정리 + 셀프 체크 안내</h2>
+        <p class="lead">오늘의 세 가지 핵심만 꼭 기억하세요.</p>
+        <div class="body">
+          <div class="closing-list">
+            <div class="closing-item"><div class="num">1</div><div class="txt">욕조 물은 가족이 함께 쓰니 빼지 않기</div></div>
+            <div class="closing-item"><div class="num">2</div><div class="txt">식사 전후 두 마디는 반드시</div></div>
+            <div class="closing-item"><div class="num">3</div><div class="txt">화장실 슬리퍼는 원위치</div></div>
+          </div>
+          <div class="cta">
+            <a href="quiz.html">이제 퀴즈! →</a>
+          </div>
+        </div>
+        <div class="brandfoot"><span>배재중학교 · Japan Home Stay 2026</span><span class="slidenum">18</span></div>
+      </section>
+
+    </div>
+  </div>
+
+  <button class="navbtn" id="prevBtn" aria-label="이전 슬라이드">‹</button>
+  <button class="navbtn" id="nextBtn" aria-label="다음 슬라이드">›</button>
+  <div class="navhint">← → 방향키 또는 버튼으로 이동 · 스와이프 가능</div>
+
+<script>
+(function(){
+  var slides = document.querySelectorAll('.slide');
+  var total = slides.length;
+  var current = 0;
+  var curEl = document.getElementById('cur');
+  var totEl = document.getElementById('tot');
+  var prevBtn = document.getElementById('prevBtn');
+  var nextBtn = document.getElementById('nextBtn');
+  totEl.textContent = total;
+
+  function show(n){
+    if(n < 0) n = 0;
+    if(n > total - 1) n = total - 1;
+    current = n;
+    slides.forEach(function(el, i){ el.classList.toggle('active', i === current); });
+    curEl.textContent = current + 1;
+    prevBtn.disabled = current === 0;
+    nextBtn.disabled = current === total - 1;
+  }
+
+  prevBtn.addEventListener('click', function(){ show(current - 1); });
+  nextBtn.addEventListener('click', function(){ show(current + 1); });
+
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' '){ show(current + 1); e.preventDefault(); }
+    else if(e.key === 'ArrowLeft' || e.key === 'PageUp'){ show(current - 1); e.preventDefault(); }
+  });
+
+  var touchStartX = null;
+  var deck = document.getElementById('deck');
+  deck.addEventListener('touchstart', function(e){ touchStartX = e.changedTouches[0].clientX; }, {passive:true});
+  deck.addEventListener('touchend', function(e){
+    if(touchStartX === null) return;
+    var dx = e.changedTouches[0].clientX - touchStartX;
+    if(dx < -50) show(current + 1);
+    else if(dx > 50) show(current - 1);
+    touchStartX = null;
+  }, {passive:true});
+
+  show(0);
+})();
+</script>
+</body>
+</html>
