@@ -58,7 +58,7 @@
   function cache(data) { if (new Date() < PRIVACY_SWITCH) localStorage.setItem(CACHE_KEY, JSON.stringify(data)); else localStorage.removeItem(CACHE_KEY); }
   function loadCache() { if (new Date() >= PRIVACY_SWITCH) { localStorage.removeItem(CACHE_KEY); return; } try { const saved = JSON.parse(localStorage.getItem(CACHE_KEY)); if (saved) { render(saved); setStatus('alert', '저장된 정보를 표시 중이며 최신 자료를 확인하고 있습니다.'); } } catch (_) {} }
   async function load() {
-    const apiUrl = window.PortalConfig && window.PortalConfig.apiUrl;
+    const apiUrl = (window.PortalConfig && window.PortalConfig.apiUrl) || "https://script.google.com/macros/s/AKfycbyJY3SK06YXqtEWVdQJMw_9HB4xAvqNZK43yGV7KrRQL_JJWChDoqJ7CGjn9xCZaTnj-g/exec";
     if (!apiUrl) { setStatus('alert', '시트 연동 준비 중입니다. 기존 교육 자료는 바로 이용할 수 있습니다.'); showNotice('관리자가 데이터 연동을 설정하는 동안에는 최신 일정·배정 자료를 이 화면에 표시하지 않습니다.'); return; }
     try { const data = await jsonp(apiUrl); render(data); cache(data); }
     catch (_) { setStatus('alert', '최신 정보를 불러오지 못했습니다. 잠시 후 다시 확인합니다.'); showNotice('현재 최신 시트 정보를 불러올 수 없습니다. 네트워크를 확인하거나 원본 시트를 열어 주세요.'); }
